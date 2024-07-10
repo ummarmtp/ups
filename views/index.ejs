@@ -45,7 +45,7 @@
                             <th>online</th> 
                             <th>Last Online</th> 
                             <th><span id="battery"><%=data.battery%></span></th> 
-                            <th><span id="load"></span></th> 
+                            <th><span id="load"><%=data.load%></span></th> 
                          </tr>
                     </tbody>
 
@@ -60,8 +60,22 @@
       const socket = io();
   
       socket.on('updateData', (data) => {
-        document.getElementById('battery').innerHTML = data.battery !== null ? data.battery + ' V' : 'hello ';
-        document.getElementById('load').textContent = data.load !== null ? data.load  : ' hh';
+       
+        document.getElementById('load').innerHTML = data.load == "1" ? "ON" : "OFF";
+        document.getElementById('load').style.color = data.load == "1" ? "green" : "red";
+            if(isNaN(data.battery))
+            {
+                data.battery="0";
+            }
+            var v = parseFloat(data.battery);
+            console.log(v);
+            document.getElementById('battery').innerHTML = v !== null ? v + ' V' : 'invalid ';
+            document.getElementById('battery').style.color = data.battery <= 10.5 ? "red" : "green";
+            
+          
+        
+        
+        
       });
     </script>
   

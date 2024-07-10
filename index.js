@@ -13,8 +13,8 @@ app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 
 let sensorData = {
-  battery: "null",
-  load: "null"
+  battery:"0",
+  load: "OFF"
 };
 
 app.post('/data', (req, res) => {
@@ -22,26 +22,12 @@ app.post('/data', (req, res) => {
   if (req.body.battery !== undefined && req.body.load !== undefined) {
     sensorData.battery = req.body.battery;
     sensorData.load = req.body.load;
-    console.log("inside if statement");
   }
   else
   {
-    console.log("oustside if state ment");
+    console.log("interrupt");
   }
-
- // const { type, value } = req.body;
-
-  //if (type == 'battery') {
-   // console.log(value);
-    //sensorData.battery = req.body.battery;
-  //} else if (type == 'load') {
-   // sensorData.load = req.body.load;
-  //}
-
-  // Emit the updated sensor data to all connected clients
   io.emit('updateData', sensorData);
-  
-
   res.send('Data received');
 });
 
