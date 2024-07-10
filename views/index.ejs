@@ -17,7 +17,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-10 mx-auto">
-                    <h1>About MTP UPS System</h1>
+                    <h1>About UnInterruptible Power Supply</h1>
                     <p class="lead">
                         This is a simple paragraph in HTML. Paragraphs are used to group blocks of text together
                     </p>
@@ -42,8 +42,8 @@
                     <tbody id="result">
                         <tr>
                             <th>1</th> 
-                            <th>online</th> 
-                            <th>Last Online</th> 
+                            <th><span id="status"><%=data.status%></span></th> 
+                            <th><span id="lastonline"><%=data.lastonline%></span></th> 
                             <th><span id="battery"><%=data.battery%></span></th> 
                             <th><span id="load"><%=data.load%></span></th> 
                          </tr>
@@ -63,6 +63,13 @@
        
         document.getElementById('load').innerHTML = data.load == "1" ? "ON" : "OFF";
         document.getElementById('load').style.color = data.load == "1" ? "green" : "red";
+
+        document.getElementById('status').innerHTML = data.status== "Online" ? "Online" : "Offline";
+        document.getElementById('status').style.color = data.status == "Online" ? "green" : "red";
+
+        document.getElementById('lastonline').innerHTML = data.lastonline;
+       // document.getElementById('lastonline').style.color = data.lastonline == "Online" ? "green" : "red";
+
             if(isNaN(data.battery))
             {
                 data.battery="0";
