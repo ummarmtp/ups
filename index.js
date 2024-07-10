@@ -74,7 +74,7 @@ function updateLastseen()
       sensorData.lastonline=dateAndtimeString();
       m = true;
   }
- 
+  socket.emit('updateData', sensorData);
 
 }
 
