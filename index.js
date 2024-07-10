@@ -25,7 +25,7 @@ let sensorData = {
   lastonline:""
 };
 
-var m=false;
+var m=true;
 
 app.post('/data', (req, res) => {
   console.log(req.body);
@@ -74,6 +74,7 @@ function updateLastseen()
       sensorData.lastonline=dateAndtimeString();
       m = true;
   }
+ 
 
 }
 
