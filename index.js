@@ -26,14 +26,16 @@ let sensorData = {
 };
 
 var m=true;
-var sec=0;
+var secound=0;
 app.post('/data', (req, res) => {
   console.log(req.body);
   if (req.body.battery !== undefined && req.body.load !== undefined) {
     sensorData.battery = req.body.battery;
     sensorData.load = req.body.load;
     m=false;
-    sec=0;
+    secound=0;
+    sensorData.lastonline=dateAndtimeString();
+    sensorData.status="Online";
     lastseen=new Date();
   }
   else
@@ -52,7 +54,7 @@ setInterval(updateLastseen, 5000);
 setInterval(secCount, 5000);
 function secCount()
 {
-  sec++;
+  secound++;
 }
 
 
@@ -83,9 +85,9 @@ function updateLastseen()
   //     sensorData.lastonline=dateAndtimeString();
   //     m = true;
   // }
-  if(sec>=1)
+  if(secound>=1)
   {
-    sec=1;
+    secound=1;
     sensorData.status = dateAndtimeString();
     sensorData.lastonline=dateAndtimeString();
   }
@@ -120,12 +122,14 @@ function dateAndtimeString()
       var year1 = lastseen.getFullYear();
        var hour1 = lastseen.getHours();
        var min1 = lastseen.getMinutes();
+       var sec1 = lastseen.getSeconds();
       day1=strLen(day1);
       month1=month1+1;
      month1= strLen(month1);
      min1=strLen(min1);
       hour1=strLen(hour1);
-      var output=hour1 + ":" + min1 + "  " + day1 + "/" +month1  + "/" + year1;
+      sec1=strLen(sec1);
+      var output=hour1 + ":" + min1+":" + sec1+ "  " + day1 + "/" +month1  + "/" + year1;
       return output;
 }
 
