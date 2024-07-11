@@ -85,7 +85,21 @@
             var v = parseFloat(data.battery);
             console.log(v);
             document.getElementById('battery').innerHTML = v !== null ? v + ' V' : 'invalid ';
-            document.getElementById('battery').style.color = data.battery <= 10.5 ? "red" : "green";
+           // document.getElementById('battery').style.color = data.battery <= 10.5 ? "red" : "green";
+           if(battery<=10.5)
+           {
+            document.getElementById('battery').style.color="red";
+
+           }
+           else if(battery<=11.6)
+           {
+            document.getElementById('battery').style.color="yellow";
+
+           }
+           else{
+            document.getElementById('battery').style.color="green";
+
+           }
             
           
         
