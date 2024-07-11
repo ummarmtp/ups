@@ -26,13 +26,14 @@ let sensorData = {
 };
 
 var m=true;
-
+var sec=0;
 app.post('/data', (req, res) => {
   console.log(req.body);
   if (req.body.battery !== undefined && req.body.load !== undefined) {
     sensorData.battery = req.body.battery;
     sensorData.load = req.body.load;
     m=false;
+    sec=0;
     lastseen=new Date();
   }
   else
@@ -47,34 +48,57 @@ app.get('/', (req, res) => {
   res.render('index', { data: sensorData });
 });
 
-setInterval(updateLastseen, 1000);
+setInterval(updateLastseen, 5000);
+setInterval(secCount, 5000);
+function secCount()
+{
+  sec++;
+}
+
+
+
 function updateLastseen()
 {
-  var time = new Date();
-  var mins = parseInt(time.getMinutes()) - parseInt(lastseen.getMinutes());
-  if (Math.abs(mins) < 1 && m == false) {
+  // var time = new Date();
+  // var mins = parseInt(time.getMinutes()) - parseInt(lastseen.getMinutes());
+  // if (Math.abs(mins) < 1 && m == false) {
+  //   sensorData.status = "Online";
+  //   sensorData.lastonline=dateAndtimeString();
+    
+  // }
+  // else {
+  //   //   var day = lastseen.getDate();
+  //   //   var month = lastseen.getMonth();
+  //   //   var year = lastseen.getFullYear();
+  //   //   var hour = lastseen.getHours();
+  //   //   var min = lastseen.getMinutes();
+  //   //   day=strLen(day);
+  //   //   month=month+1;
+  //   //  month= strLen(month);
+  //   //   min=strLen(min);
+  //   //   min=strLen(hour);
+  //     //sensorData.status = hour + ":" + min + "  " + day + "/" +month  + "/" + year;
+  //     //sensorData.lastonline = hour + ":" + min + "  " + day + "/" +month  + "/" + year;
+  //     sensorData.status=dateAndtimeString();
+  //     sensorData.lastonline=dateAndtimeString();
+  //     m = true;
+  // }
+  if(sec>=1)
+  {
+    sec=1;
+    sensorData.status = dateAndtimeString();
+    sensorData.lastonline=dateAndtimeString();
+  }
+  else
+  {
     sensorData.status = "Online";
     sensorData.lastonline=dateAndtimeString();
-    
+
   }
-  else {
-    //   var day = lastseen.getDate();
-    //   var month = lastseen.getMonth();
-    //   var year = lastseen.getFullYear();
-    //   var hour = lastseen.getHours();
-    //   var min = lastseen.getMinutes();
-    //   day=strLen(day);
-    //   month=month+1;
-    //  month= strLen(month);
-    //   min=strLen(min);
-    //   min=strLen(hour);
-      //sensorData.status = hour + ":" + min + "  " + day + "/" +month  + "/" + year;
-      //sensorData.lastonline = hour + ":" + min + "  " + day + "/" +month  + "/" + year;
-      sensorData.status=dateAndtimeString();
-      sensorData.lastonline=dateAndtimeString();
-      m = true;
-  }
-  //socket.emit('updateData', sensorData);
+  //sensorData.load=sensorData.load=='1'?'0':'1'
+
+
+  io.emit('updateData', sensorData);
 
 }
 
