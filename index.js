@@ -50,8 +50,8 @@ app.get('/', (req, res) => {
   res.render('index', { data: sensorData });
 });
 
-setInterval(updateLastseen, 20000);
-setInterval(secCount, 20000);
+setInterval(updateLastseen, 50000);
+setInterval(secCount, 50000);
 function secCount()
 {
   secound++;
