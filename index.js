@@ -2,12 +2,34 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
+const mongoose = require('mongoose');
+// MongoDB connection
+  //mongoose.connect("mongodb+srv://ummarrahil:06031998Rahil@cluster0.7baglhg.mongodb.net/device?retryWrites=true&w=majority&appName=Cluster0").then(()=>{
+  mongoose.connect("mongodb://127.0.0.1:27017/device").then(()=>{
+  console.log("mongodb connected")
+  initializeData();
+}).catch((error)=>console.log(error));
+
+// Define schema and model
+const deviceData = new mongoose.Schema({
+  id:String,
+  battery: String,
+  load: String,
+  status: String,
+  lastonline: String,
+  lastDate:Date
+}
+
+);
+
+const userModel=mongoose.model("data",deviceData);
 
 const { time } = require('console');
 process.env.TZ = 'Asia/Dubai'
 'Asia/Dubai'
 
-var lastseen=new Date();
+var secound = new Array(2).fill(0);
+var lastseen = new Array(2).fill(new Date());
 
 const app = express();
 const server = http.createServer(app);
@@ -15,94 +37,109 @@ const io = socketIo(server);
 
 const port = 3000;
 
-app.use(bodyParser.json());
+app.use(bodyParser.json()); 
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
-let sensorData = {
+let sensorData = [{
+  id:"1",
   battery:"0",
   load: "OFF",
   status:"OFFLINE",
-  lastonline:""
-};
+  lastonline:"",
+  lastDate:new Date()
+},
+{
+  id:"2",
+  battery:"0",
+  load: "OFF",
+  status:"OFFLINE",
+  lastonline:"",
+  lastDate:new Date()
+}
+];
 
 var m=true;
-var secound=0;
-app.post('/data', (req, res) => {
+
+app.post('/data', async (req, res) => {
   console.log(req.body);
   if (req.body.battery !== undefined && req.body.load !== undefined) {
-    sensorData.battery = req.body.battery;
-    sensorData.load = req.body.load;
+    sensorData[parseInt(req.body.id)-1].battery = req.body.battery;
+    sensorData[parseInt(req.body.id)-1].load = req.body.load;
     m=false;
-    secound=0;
-    sensorData.lastonline=dateAndtimeString();
-    sensorData.status="Online";
-    lastseen=new Date();
+    secound[parseInt(req.body.id)-1]=0;
+    lastseen[parseInt(req.body.id)-1]=new Date();
+    sensorData[parseInt(req.body.id)-1].lastDate=lastseen[parseInt(req.body.id)-1];
+    sensorData[parseInt(req.body.id)-1].lastonline=dateAndtimeString(parseInt(req.body.id)-1);
+    sensorData[parseInt(req.body.id)-1].status="Online";
+    
+    
+    //const newSensorData = new userModel(sensorData);
+    await userModel.updateOne({id:req.body.id}, { $set: sensorData[parseInt(req.body.id)-1] }, { upsert: true });
   }
   else
   {
     console.log("interrupt");
   }
+
+  
   io.emit('updateData', sensorData);
   res.send('Data received');
 });
 
-app.get('/', (req, res) => {
+app.get('/', async(req, res) => {
   res.render('index', { data: sensorData });
 });
+app.get('/user', async(req, res) => {
+  const data=await userModel.find();
+  res.json(data);
+});
 
-setInterval(updateLastseen, 50000);
-setInterval(secCount, 50000);
-function secCount()
+
+
+setInterval(updateLastseen, 20000);
+setInterval(secCount, 20000);
+async function secCount()
 {
-  secound++;
+  for(let i=0;i<2;i++)
+  {
+    secound[i]++;
+
+  }
+  
 }
 
 
 
-function updateLastseen()
+async function updateLastseen()
 {
-  // var time = new Date();
-  // var mins = parseInt(time.getMinutes()) - parseInt(lastseen.getMinutes());
-  // if (Math.abs(mins) < 1 && m == false) {
-  //   sensorData.status = "Online";
-  //   sensorData.lastonline=dateAndtimeString();
-    
-  // }
-  // else {
-  //   //   var day = lastseen.getDate();
-  //   //   var month = lastseen.getMonth();
-  //   //   var year = lastseen.getFullYear();
-  //   //   var hour = lastseen.getHours();
-  //   //   var min = lastseen.getMinutes();
-  //   //   day=strLen(day);
-  //   //   month=month+1;
-  //   //  month= strLen(month);
-  //   //   min=strLen(min);
-  //   //   min=strLen(hour);
-  //     //sensorData.status = hour + ":" + min + "  " + day + "/" +month  + "/" + year;
-  //     //sensorData.lastonline = hour + ":" + min + "  " + day + "/" +month  + "/" + year;
-  //     sensorData.status=dateAndtimeString();
-  //     sensorData.lastonline=dateAndtimeString();
-  //     m = true;
-  // }
-  if(secound>=1)
+ 
+  for( m=0;m<2;m++)
   {
-    secound=1;
-    sensorData.status = dateAndtimeString();
-    sensorData.lastonline=dateAndtimeString();
+    console.log(m);
+    if(secound[m]>=1)
+      {
+        console.log("hello"+m);
+        console.log(secound[m]);
+        secound[m]=2;
+        sensorData[m].status ="Offline";
+        sensorData[m].lastonline=dateAndtimeString(m);
+        sensorData[m].lastDate=lastseen[m];
+      }
+      else
+      {
+        sensorData[m].status = "Online";
+        sensorData[m].lastonline=dateAndtimeString(m);
+        sensorData[m].lastDate=lastseen[m];
+      }
+      
+      await userModel.updateOne({id:(m+1).toString()}, { $set: sensorData[m] }, { upsert: true });
   }
-  else
-  {
-    sensorData.status = "Online";
-    sensorData.lastonline=dateAndtimeString();
-
-  }
-  //sensorData.load=sensorData.load=='1'?'0':'1'
-
-
+ 
   io.emit('updateData', sensorData);
-
-}
+  //await userModel.updateMany({}, { $set: sensorData }, { upsert: true });
+  console.log(sensorData);
+  //
+} 
 
 function strLen(data) {
   var value=data.toString().length;
@@ -115,14 +152,14 @@ function strLen(data) {
   }
 }
 
-function dateAndtimeString()
+function dateAndtimeString(k)
 {
-  var day1 = lastseen.getDate();
-      var month1 = lastseen.getMonth();
-      var year1 = lastseen.getFullYear();
-       var hour1 = lastseen.getHours();
-       var min1 = lastseen.getMinutes();
-       var sec1 = lastseen.getSeconds();
+       var day1 = lastseen[k].getDate();
+       var month1 = lastseen[k].getMonth();
+       var year1 = lastseen[k].getFullYear();
+       var hour1 = lastseen[k].getHours();
+       var min1 = lastseen[k].getMinutes();
+       var sec1 = lastseen[k].getSeconds();
       day1=strLen(day1);
       month1=month1+1;
      month1= strLen(month1);
@@ -139,9 +176,32 @@ io.on('connection', (socket) => {
   socket.emit('updateData', sensorData); // Send the initial data to the new client
   socket.on('disconnect', () => {
     console.log('Client disconnected');
-  });
+  });  
 });
 
-server.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+async function initializeData() {
+  const latestData = await userModel.find({}, {}, { sort: { 'createdAt': -1 } });
+  if (latestData) {
+    
+    sensorData = latestData.map(doc => doc.toObject());
+    for(let i=0;i<2;i++)
+    {
+      lastseen[i]=sensorData[i].lastDate;
+      if(sensorData[i].status=="Offline")
+      {
+        secound[i]=2;
+      }
+      else{
+        secound[i]=0;
+      }
+    }
+    console.log(sensorData);
+  } else { 
+    console.log("No data found in MongoDB. Using default values.");
+  }
+  server.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
+}
+
+
