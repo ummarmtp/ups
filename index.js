@@ -170,7 +170,7 @@ function dateAndtimeString(k)
      min1=strLen(min1);
       hour1=strLen(hour1);
       sec1=strLen(sec1);
-      var output=hour1 + ":" + min1+":" +  "  " + day1 + "/" +month1  + "/" + year1;
+      var output=hour1 + ":" + min1+":"+sec1 +  "  " + day1 + "/" +month1  + "/" + year1;
       return output;
 }
 
