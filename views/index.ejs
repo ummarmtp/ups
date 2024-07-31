@@ -45,6 +45,7 @@
                            <th>Last Online</th> 
                            <th>Battery</th> 
                            <th>Load</th> 
+                           <th>Temperature</th> 
                         </tr>
                     </thead>
                     <tbody id="result">
@@ -54,6 +55,7 @@
                             <th><span class="lastonline"></span></th> 
                             <th><span class="battery"></span></th> 
                             <th><span class="load"></span></th> 
+                             <th><span class="temperature"></span></th> 
                          </tr>
                          <!-- <tr>
                             <th><span class="id"></span></th> 
@@ -61,6 +63,7 @@
                             <th><span class="lastonline"></span></th> 
                             <th><span class="battery"></span></th> 
                             <th><span class="load"></span></th> 
+                            <th><span class="temperature"></span></th>
                          </tr> -->
                     </tbody>
 
@@ -75,7 +78,7 @@
       const socket = io();
   
       socket.on('updateData', (data) => {
-       for(let i=0;i<=1;i++)
+       for(let i=0;i<1;i++)
        {
         document.getElementsByClassName('load')[i].innerHTML = data[i].load == "1" ? "ON" : "OFF";
         document.getElementsByClassName('id')[i].innerHTML = data[i].id;
@@ -83,12 +86,13 @@
         document.getElementsByClassName('status')[i].innerHTML = data[i].status== "Online" ? "Online" : "Offline";
         document.getElementsByClassName('status')[i].style.color = data[i].status == "Online" ? "green" : "red";
         document.getElementsByClassName('lastonline')[i].innerHTML = data[i].lastonline;
+        document.getElementsByClassName('temperature')[i].innerHTML = data[i].tem+"&degC";
         if(isNaN(data[i].battery))
             {
                 data[i].battery="0";
             }
             var v = parseFloat(data[i].battery);
-            console.log(v);
+            //console.log(v);
             document.getElementsByClassName('battery')[i].innerHTML = v !== null ? v + ' V' : 'invalid ';
             document.getElementsByClassName('battery')[i].style.color = data[i].battery <= 10.5 ? "red" : "green";  
 

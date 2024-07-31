@@ -5,7 +5,7 @@ const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 // MongoDB connection
   mongoose.connect("mongodb+srv://ummarrahil:06031998Rahil@cluster0.7baglhg.mongodb.net/device?retryWrites=true&w=majority&appName=Cluster0").then(()=>{
-  //mongoose.connect("mongodb://127.0.0.1:27017/device").then(()=>{
+ // mongoose.connect("mongodb://127.0.0.1:27017/device").then(()=>{
   console.log("mongodb connected")
   initializeData();
 }).catch((error)=>console.log(error));
@@ -17,7 +17,8 @@ const deviceData = new mongoose.Schema({
   load: String,
   status: String,
   lastonline: String,
-  lastDate:Date
+  lastDate:Date,
+  tem:String
 }
 
 );
@@ -46,7 +47,8 @@ let sensorData = [{
   load: "OFF",
   status:"OFFLINE",
   lastonline:"",
-  lastDate:new Date()
+  lastDate:new Date(),
+  tem:" "
 },
 {
   id:"2",
@@ -54,7 +56,8 @@ let sensorData = [{
   load: "OFF",
   status:"OFFLINE",
   lastonline:"",
-  lastDate:new Date()
+  lastDate:new Date(),
+  tem:" "
 }
 ];
 
@@ -65,6 +68,7 @@ app.post('/data', async (req, res) => {
   if (req.body.battery !== undefined && req.body.load !== undefined) {
     sensorData[parseInt(req.body.id)-1].battery = req.body.battery;
     sensorData[parseInt(req.body.id)-1].load = req.body.load;
+    sensorData[parseInt(req.body.id)-1].tem = req.body.tem;
     m=false;
     secound[parseInt(req.body.id)-1]=0;
     lastseen[parseInt(req.body.id)-1]=new Date();
