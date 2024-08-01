@@ -87,6 +87,7 @@
         document.getElementsByClassName('status')[i].style.color = data[i].status == "Online" ? "green" : "red";
         document.getElementsByClassName('lastonline')[i].innerHTML = data[i].lastonline;
         document.getElementsByClassName('temperature')[i].innerHTML = data[i].tem+"&degC";
+        document.getElementsByClassName('temperature')[i].style.color ="green";
         if(isNaN(data[i].battery))
             {
                 data[i].battery="0";
