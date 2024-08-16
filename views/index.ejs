@@ -57,14 +57,78 @@
                             <th><span class="load"></span></th> 
                              <th><span class="temperature"></span></th> 
                          </tr>
-                         <!-- <tr>
+                         <tr>
                             <th><span class="id"></span></th> 
                             <th><span class="status"></span></th> 
                             <th><span class="lastonline"></span></th> 
                             <th><span class="battery"></span></th> 
                             <th><span class="load"></span></th> 
                             <th><span class="temperature"></span></th>
-                         </tr> -->
+                         </tr>
+                         <tr>
+                            <th><span class="id"></span></th> 
+                            <th><span class="status"></span></th> 
+                            <th><span class="lastonline"></span></th> 
+                            <th><span class="battery"></span></th> 
+                            <th><span class="load"></span></th> 
+                            <th><span class="temperature"></span></th>
+                         </tr>
+                         <tr>
+                            <th><span class="id"></span></th> 
+                            <th><span class="status"></span></th> 
+                            <th><span class="lastonline"></span></th> 
+                            <th><span class="battery"></span></th> 
+                            <th><span class="load"></span></th> 
+                            <th><span class="temperature"></span></th>
+                         </tr>
+                         <tr>
+                            <th><span class="id"></span></th> 
+                            <th><span class="status"></span></th> 
+                            <th><span class="lastonline"></span></th> 
+                            <th><span class="battery"></span></th> 
+                            <th><span class="load"></span></th> 
+                            <th><span class="temperature"></span></th>
+                         </tr>
+                         <tr>
+                            <th><span class="id"></span></th> 
+                            <th><span class="status"></span></th> 
+                            <th><span class="lastonline"></span></th> 
+                            <th><span class="battery"></span></th> 
+                            <th><span class="load"></span></th> 
+                            <th><span class="temperature"></span></th>
+                         </tr>
+                         <tr>
+                            <th><span class="id"></span></th> 
+                            <th><span class="status"></span></th> 
+                            <th><span class="lastonline"></span></th> 
+                            <th><span class="battery"></span></th> 
+                            <th><span class="load"></span></th> 
+                            <th><span class="temperature"></span></th>
+                         </tr>
+                         <tr>
+                            <th><span class="id"></span></th> 
+                            <th><span class="status"></span></th> 
+                            <th><span class="lastonline"></span></th> 
+                            <th><span class="battery"></span></th> 
+                            <th><span class="load"></span></th> 
+                            <th><span class="temperature"></span></th>
+                         </tr>
+                         <tr>
+                            <th><span class="id"></span></th> 
+                            <th><span class="status"></span></th> 
+                            <th><span class="lastonline"></span></th> 
+                            <th><span class="battery"></span></th> 
+                            <th><span class="load"></span></th> 
+                            <th><span class="temperature"></span></th>
+                         </tr>
+                         <tr>
+                            <th><span class="id"></span></th> 
+                            <th><span class="status"></span></th> 
+                            <th><span class="lastonline"></span></th> 
+                            <th><span class="battery"></span></th> 
+                            <th><span class="load"></span></th> 
+                            <th><span class="temperature"></span></th>
+                         </tr>
                     </tbody>
 
                 </table>
@@ -78,7 +142,7 @@
       const socket = io();
   
       socket.on('updateData', (data) => {
-       for(let i=0;i<1;i++)
+       for(let i=0;i<10;i++)
        {
         document.getElementsByClassName('load')[i].innerHTML = data[i].load == "1" ? "ON" : "OFF";
         document.getElementsByClassName('id')[i].innerHTML = data[i].id;

@@ -5,7 +5,7 @@ const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 // MongoDB connection
   mongoose.connect("mongodb+srv://ummarrahil:06031998Rahil@cluster0.7baglhg.mongodb.net/device?retryWrites=true&w=majority&appName=Cluster0").then(()=>{
- // mongoose.connect("mongodb://127.0.0.1:27017/device").then(()=>{
+  //mongoose.connect("mongodb://127.0.0.1:27017/device").then(()=>{
   console.log("mongodb connected")
   initializeData();
 }).catch((error)=>console.log(error));
@@ -29,8 +29,8 @@ const { time } = require('console');
 process.env.TZ = 'Asia/Dubai'
 'Asia/Dubai'
 
-var secound = new Array(2).fill(0);
-var lastseen = new Array(2).fill(new Date());
+var secound = new Array(10).fill(0);
+var lastseen = new Array(10).fill(new Date());
 
 const app = express();
 const server = http.createServer(app);
@@ -58,7 +58,80 @@ let sensorData = [{
   lastonline:"",
   lastDate:new Date(),
   tem:" "
+},
+{
+  id:"3",
+  battery:"0",
+  load: "OFF",
+  status:"OFFLINE",
+  lastonline:"",
+  lastDate:new Date(),
+  tem:" "
+},
+{
+  id:"4",
+  battery:"0",
+  load: "OFF",
+  status:"OFFLINE",
+  lastonline:"",
+  lastDate:new Date(),
+  tem:" "
+},
+{
+  id:"5",
+  battery:"0",
+  load: "OFF",
+  status:"OFFLINE",
+  lastonline:"",
+  lastDate:new Date(),
+  tem:" "
+},
+{
+  id:"6",
+  battery:"0",
+  load: "OFF",
+  status:"OFFLINE",
+  lastonline:"",
+  lastDate:new Date(),
+  tem:" "
+},
+{
+  id:"7",
+  battery:"0",
+  load: "OFF",
+  status:"OFFLINE",
+  lastonline:"",
+  lastDate:new Date(),
+  tem:" "
+},
+{
+  id:"8",
+  battery:"0",
+  load: "OFF",
+  status:"OFFLINE",
+  lastonline:"",
+  lastDate:new Date(),
+  tem:" "
+},
+{
+  id:"9",
+  battery:"0",
+  load: "OFF",
+  status:"OFFLINE",
+  lastonline:"",
+  lastDate:new Date(),
+  tem:" "
+},
+{
+  id:"10",
+  battery:"0",
+  load: "OFF",
+  status:"OFFLINE",
+  lastonline:"",
+  lastDate:new Date(),
+  tem:" "
 }
+
 ];
 
 var m=true;
@@ -104,7 +177,7 @@ setInterval(updateLastseen, 20000);
 setInterval(secCount, 20000);
 async function secCount()
 {
-  for(let i=0;i<2;i++)
+  for(let i=0;i<10;i++)
   {
     secound[i]++;
 
@@ -117,13 +190,13 @@ async function secCount()
 async function updateLastseen()
 {
  
-  for( m=0;m<2;m++)
+  for( m=0;m<10;m++)
   {
     console.log(m);
     if(secound[m]>=1)
       {
-        console.log("hello"+m);
-        console.log(secound[m]);
+        //console.log("hello"+m);
+        //console.log(secound[m]);
         secound[m]=2;
         sensorData[m].status ="Offline";
         sensorData[m].lastonline=dateAndtimeString(m);
@@ -188,7 +261,7 @@ async function initializeData() {
   if (latestData) {
     
     sensorData = latestData.map(doc => doc.toObject());
-    for(let i=0;i<2;i++)
+    for(let i=0;i<10;i++)
     {
       lastseen[i]=sensorData[i].lastDate;
       if(sensorData[i].status=="Offline")
