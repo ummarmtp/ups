@@ -139,7 +139,10 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io();
+     const socket = io('https://mtp-ups.onrender.com/', {
+  transports: ['websocket'] // Force WebSocket transport
+});
+
   
       socket.on('updateData', (data) => {
        for(let i=0;i<10;i++)
